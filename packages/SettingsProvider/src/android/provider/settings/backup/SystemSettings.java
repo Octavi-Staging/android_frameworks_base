@@ -105,5 +105,6 @@ public class SystemSettings {
         Settings.System.QQS_LAYOUT,
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.MAX_VISIBLE_NOTIFICATION_ICONS,
+        Settings.System.STATUS_BAR_NOTIF_COUNT,
     };
 }
