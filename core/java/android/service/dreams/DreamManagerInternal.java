@@ -85,6 +85,7 @@ public abstract class DreamManagerInternal {
     /**
      * Called when there are changes to dream state.
      */
+
     public interface DreamManagerStateListener {
         /**
          * Called when keep dreaming when undocked has changed.
@@ -93,4 +94,9 @@ public abstract class DreamManagerInternal {
          */
         void onKeepDreamingWhenUndockedChanged(boolean keepDreaming);
     }
+
+    /**
+     * Called by the power manager to determine whether the dream has gone to doze mode.
+     */
+    public abstract boolean isDozing();
 }
