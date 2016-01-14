@@ -5731,7 +5731,7 @@ public final class Settings {
          * What size to show for network traffic indicator in statusbar
          * @hide
          */
-         public static final String NETWORK_TRAFFIC_FONT_SIZE = "network_traffic_font_size";
+        public static final String NETWORK_TRAFFIC_FONT_SIZE = "network_traffic_font_size";
 
         /**
          * Show network traffic indicator
@@ -5739,7 +5739,21 @@ public final class Settings {
          * 1 - QS Header
          * @hide
          */
-         public static final String NETWORK_TRAFFIC_VIEW_LOCATION = "network_traffic_view_location";
+        public static final String NETWORK_TRAFFIC_VIEW_LOCATION = "network_traffic_view_location";
+
+         /**
+         * whether to enable or disable vibration on succesful fingerprint auth
+         *
+         * @hide
+         */
+        public static final String FP_SUCCESS_VIBRATE = "fingerprint_success_vib";
+
+        /**
+         * whether to enable or disable vibration on failed fingerprint auth
+         *
+         * @hide
+         */
+        public static final String FP_ERROR_VIBRATE = "fingerprint_error_vib";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
