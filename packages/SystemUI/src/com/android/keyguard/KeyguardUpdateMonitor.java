@@ -408,6 +408,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     private int mPostureState = DEVICE_POSTURE_UNKNOWN;
     private FingerprintInteractiveToAuthProvider mFingerprintInteractiveToAuthProvider;
 
+    private final boolean mFingerprintWakeAndUnlock;
+
     /**
      * Short delay before restarting fingerprint authentication after a successful try. This should
      * be slightly longer than the time between onFingerprintAuthenticated and
@@ -2345,6 +2347,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         mTelephonyListenerManager = telephonyListenerManager;
         mDeviceProvisioned = isDeviceProvisionedInSettingsDb();
         mStrongAuthTracker = new StrongAuthTracker(context);
+        mFingerprintWakeAndUnlock = mContext.getResources().getBoolean(
+                com.android.systemui.R.bool.config_fingerprintWakeAndUnlock);
         mBackgroundExecutor = backgroundExecutor;
         mBroadcastDispatcher = broadcastDispatcher;
         mInteractionJankMonitor = interactionJankMonitor;
@@ -3053,7 +3057,18 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         final int user = getCurrentUser();
         final boolean userDoesNotHaveTrust = !getUserHasTrust(user);
         final boolean shouldListenForFingerprintAssistant = shouldListenForFingerprintAssistant();
-        final boolean shouldListenKeyguardState =
+        final boolean shouldListenKeyguardState;
+        if (!mFingerprintWakeAndUnlock) {
+            shouldListenKeyguardState =
+                (isKeyguardVisible()
+                        || mPrimaryBouncerIsOrWillBeShowing
+                        || shouldListenForFingerprintAssistant
+                        || (mKeyguardOccluded && mIsDreaming))
+                        && mDeviceInteractive && !mGoingToSleep && !mKeyguardGoingAway
+                        || (mKeyguardOccluded && userDoesNotHaveTrust
+                            && (mOccludingAppRequestingFp || isUdfps));
+        } else {
+            shouldListenKeyguardState =
                 isKeyguardVisible()
                         || !mDeviceInteractive
                         || (mPrimaryBouncerIsOrWillBeShowing && !mKeyguardGoingAway)
@@ -3062,6 +3077,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                         || (mKeyguardOccluded && mIsDreaming)
                         || (mKeyguardOccluded && userDoesNotHaveTrust && mKeyguardShowing
                             && (mOccludingAppRequestingFp || isUdfps || mAlternateBouncerShowing));
+        }
 
         // Only listen if this KeyguardUpdateMonitor belongs to the system user. There is an
         // instance of KeyguardUpdateMonitor for each user but KeyguardUpdateMonitor is user-aware.
