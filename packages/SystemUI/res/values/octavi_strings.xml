@@ -52,4 +52,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
 
+    <!-- Volte/VoWiFi Icon -->
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
+
 </resources>
