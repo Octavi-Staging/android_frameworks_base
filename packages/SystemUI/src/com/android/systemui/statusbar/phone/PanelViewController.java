@@ -195,6 +195,7 @@ public abstract class PanelViewController {
     private final TouchHandler mTouchHandler;
     private final InteractionJankMonitor mInteractionJankMonitor;
     protected final SystemClock mSystemClock;
+    protected boolean mDoubleTapToSleepEnabled;
 
     protected abstract void onExpandingFinished();
 
@@ -1355,7 +1356,7 @@ public abstract class PanelViewController {
                         onTrackingStarted();
                     }
                     if (isFullyCollapsed() && !mHeadsUpManager.hasPinnedHeadsUp()
-                            && !mCentralSurfaces.isBouncerShowing()) {
+                            && !mCentralSurfaces.isBouncerShowing() && !mDoubleTapToSleepEnabled) {
                         startOpening(event);
                     }
                     break;
