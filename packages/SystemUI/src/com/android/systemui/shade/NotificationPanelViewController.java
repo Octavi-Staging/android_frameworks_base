@@ -660,8 +660,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
     private final ActivityStarter mActivityStarter;
 
-    private GestureDetector mLockscreenDoubleTapToSleep;
+    private GestureDetector mDoubleTapToSleepGesture;
     private boolean mIsLockscreenDoubleTapEnabled;
+    private boolean mDoubleTapToSleepEnabled;
+    private int mStatusBarHeaderHeight;
 
     @Inject
     public NotificationPanelViewController(NotificationPanelView view,
@@ -919,11 +921,11 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
         updateUserSwitcherFlags();
 
-        mLockscreenDoubleTapToSleep = new GestureDetector(context,
+        mDoubleTapToSleepGesture = new GestureDetector(mView.getContext(),
                 new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                OctaviUtils.switchScreenOff(context);
+                OctaviUtils.switchScreenOff(mView.getContext());
                 return true;
             }
         });
@@ -1162,6 +1164,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         mMaxOverscrollAmountForPulse = mResources.getDimensionPixelSize(
                 R.dimen.pulse_expansion_max_top_overshoot);
         mUdfpsMaxYBurnInOffset = mResources.getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
+        mStatusBarHeaderHeight = mResources.getDimensionPixelSize(
+                R.dimen.status_bar_height);
         mSplitShadeScrimTransitionDistance = mResources.getDimensionPixelSize(
                 R.dimen.split_shade_scrim_transition_distance);
         mDreamingToLockscreenTransitionTranslationY = mResources.getDimensionPixelSize(
@@ -3367,7 +3371,11 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     }
 
     public void setLockscreenDoubleTapToSleep(boolean isDoubleTapEnabled) {
-        mIsLockscreenDoubleTapEnabled = isDoubleTapEnabled
+        mIsLockscreenDoubleTapEnabled = isDoubleTapEnabled;
+    }
+
+    public void updateDoubleTapToSleep(boolean doubleTapToSleepEnabled) {
+        mDoubleTapToSleepEnabled = doubleTapToSleepEnabled;
     }
 
     @Override
@@ -4817,9 +4825,11 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 expand(true /* animate */);
             }
 
-            if (mIsLockscreenDoubleTapEnabled && !mPulsing && !mDozing
-                    && mStatusBarState == StatusBarState.KEYGUARD) {
-                mLockscreenDoubleTapToSleep.onTouchEvent(event);
+            if ((mIsLockscreenDoubleTapEnabled && !mPulsing && !mDozing
+                    && mBarState == StatusBarState.KEYGUARD) ||
+                    (!mQsController.getExpanded() && mDoubleTapToSleepEnabled
+                    && event.getY() < mStatusBarHeaderHeight)) {
+                mDoubleTapToSleepGesture.onTouchEvent(event);
             }
             initDownStates(event);
 
@@ -4949,7 +4959,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                         onTrackingStarted();
                     }
                     if (isFullyCollapsed() && !mHeadsUpManager.hasPinnedHeadsUp()
-                            && !mCentralSurfaces.isBouncerShowing()) {
+                            && !mCentralSurfaces.isBouncerShowing() && !mDoubleTapToSleepEnabled) {
                         startOpening(event);
                     }
                     break;
