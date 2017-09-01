@@ -70,6 +70,7 @@ import android.provider.Settings;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.util.MathUtils;
+import android.view.GestureDetector;
 import android.view.InputDevice;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -223,6 +224,7 @@ import com.android.systemui.util.time.SystemClock;
 import com.android.wm.shell.animation.FlingAnimationUtils;
 
 import kotlin.Unit;
+import com.android.internal.util.octavi.OctaviUtils;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -658,6 +660,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
     private final ActivityStarter mActivityStarter;
 
+    private GestureDetector mLockscreenDoubleTapToSleep;
+    private boolean mIsLockscreenDoubleTapEnabled;
+
     @Inject
     public NotificationPanelViewController(NotificationPanelView view,
             @Main Handler handler,
@@ -913,6 +918,15 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 SysUIUnfoldComponent::getNotificationPanelUnfoldAnimationController);
 
         updateUserSwitcherFlags();
+
+        mLockscreenDoubleTapToSleep = new GestureDetector(context,
+                new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                OctaviUtils.switchScreenOff(context);
+                return true;
+            }
+        });
         mKeyguardBottomAreaViewModel = keyguardBottomAreaViewModel;
         mKeyguardBottomAreaInteractor = keyguardBottomAreaInteractor;
         KeyguardLongPressViewBinder.bind(
@@ -3352,6 +3366,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         updateMaxDisplayedNotifications(true);
     }
 
+    public void setLockscreenDoubleTapToSleep(boolean isDoubleTapEnabled) {
+        mIsLockscreenDoubleTapEnabled = isDoubleTapEnabled
+    }
+
     @Override
     public void resetTranslation() {
         mView.setTranslationX(0f);
@@ -4797,6 +4815,11 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             // In such case, simply expand the panel instead of being stuck at the bottom bar.
             if (mLastEventSynthesizedDown && event.getAction() == MotionEvent.ACTION_UP) {
                 expand(true /* animate */);
+            }
+
+            if (mIsLockscreenDoubleTapEnabled && !mPulsing && !mDozing
+                    && mStatusBarState == StatusBarState.KEYGUARD) {
+                mLockscreenDoubleTapToSleep.onTouchEvent(event);
             }
             initDownStates(event);
 
