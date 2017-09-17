@@ -77,4 +77,9 @@
     <java-symbol type="style" name="GlobalActionsAnimationXylon" />
     <java-symbol type="style" name="GlobalActionsAnimationCard" />
 
+    <!-- LED stuff -->
+    <java-symbol type="bool" name="config_intrusiveBatteryLed" />
+    <java-symbol type="bool" name="config_multiColorBatteryLed" />
+    <java-symbol type="bool" name="config_ledCanPulse" />
+
 </resources>
