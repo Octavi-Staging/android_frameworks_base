@@ -39,6 +39,7 @@
         <item>airplane</item>
         <item>settings</item>
         <item>lockdown</item>
+        <item>torch</item>
     </string-array>
 
     <!-- Any package that has one of the package names defined below will be prevented
