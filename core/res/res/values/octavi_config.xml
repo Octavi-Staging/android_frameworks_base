@@ -32,6 +32,12 @@
         <item>power</item>
         <item>restart</item>
         <item>logout</item>
+        <item>users</item>
+        <item>silent</item>
+        <item>screenshot</item>
+        <item>airplane</item>
+        <item>settings</item>
+        <item>lockdown</item>
     </string-array>
 
     <!-- Any package that has one of the package names defined below will be prevented
