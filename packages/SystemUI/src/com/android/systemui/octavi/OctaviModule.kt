@@ -18,6 +18,7 @@ package com.android.systemui.octavi
 
 import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.CaffeineTile
+import com.android.systemui.qs.tiles.CPUInfoTile
 import com.android.systemui.qs.tiles.DataSwitchTile
 import com.android.systemui.qs.tiles.FPSInfoTile
 import com.android.systemui.qs.tiles.SyncTile
@@ -52,4 +53,10 @@ interface OctaviModule {
     @IntoMap
     @StringKey(FPSInfoTile.TILE_SPEC)
     fun bindFPSInfoTile(fpsInfoTile: FPSInfoTile): QSTileImpl<*>
+
+    /** Inject CPUInfoTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(CPUInfoTile.TILE_SPEC)
+    fun bindCPUInfoTile(cpuInfoTile: CPUInfoTile): QSTileImpl<*>
 }
