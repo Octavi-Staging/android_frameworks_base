@@ -50,6 +50,7 @@ import com.android.systemui.R;
 import com.android.systemui.battery.BatteryMeterView;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.phone.StatusBarContentInsetsProvider;
+import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBarIconController.TintedIconManager;
 import com.android.systemui.statusbar.phone.StatusIconContainer;
 import com.android.systemui.statusbar.policy.Clock;
@@ -57,6 +58,7 @@ import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.statusbar.policy.VariableDateView;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.LargeScreenUtils;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.List;
 
@@ -205,6 +207,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         updateResources();
 
         Dependency.get(TunerService.class).addTunable(this,
+                StatusBarIconController.ICON_HIDE_LIST,
                 STATUS_BAR_BATTERY_STYLE,
                 QS_BATTERY_STYLE,
                 QS_BATTERY_LOCATION,
