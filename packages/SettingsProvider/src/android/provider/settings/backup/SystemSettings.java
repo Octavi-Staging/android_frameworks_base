@@ -91,6 +91,7 @@ public class SystemSettings {
         Settings.System.FULLSCREEN_GESTURES,
         Settings.System.ENABLE_RIPPLE_EFFECT,
         Settings.System.NETWORK_TRAFFIC_STATE,
+        Settings.System.NETWORK_TRAFFIC_TYPE,
         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
     };
 }
