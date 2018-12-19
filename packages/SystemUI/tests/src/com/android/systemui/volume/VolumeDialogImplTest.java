@@ -102,6 +102,8 @@ public class VolumeDialogImplTest extends SysuiTestCase {
     InteractionJankMonitor mInteractionJankMonitor;
     @Mock
     private DumpManager mDumpManager;
+    @Mock
+    TunerService mTunerService;
 
     @Before
     public void setup() throws Exception {
@@ -121,6 +123,7 @@ public class VolumeDialogImplTest extends SysuiTestCase {
                 mMediaOutputDialogFactory,
                 mVolumePanelFactory,
                 mActivityStarter,
+                mTunerService,
                 mInteractionJankMonitor,
                 mDeviceConfigProxy,
                 mExecutor,
