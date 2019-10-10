@@ -5721,6 +5721,12 @@ public final class Settings {
         public static final String QS_FOOTER_DATA_USAGE = "qs_footer_data_usage";
 
         /**
+         * Use doubletap as doze pulse triggers
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_DOUBLETAP = "doze_trigger_doubletap";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
