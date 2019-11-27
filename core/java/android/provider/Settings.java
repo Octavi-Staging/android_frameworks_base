@@ -5688,6 +5688,11 @@ public final class Settings {
         public static final String SENSOR_BLOCKED_APP_DUMMY = "sensor_blocked_app_dummy";
 
         /**
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
+
+        /**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
           * 1 - Volume up/down moves cursor left/right
