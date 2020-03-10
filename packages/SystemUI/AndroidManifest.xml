@@ -1064,5 +1064,9 @@
             android:exported="true"
             android:permission="android.permission.CUSTOMIZE_SYSTEM_UI"
             />
+
+        <!-- FPS Info -->
+        <service android:name=".FPSInfoService"
+                android:exported="false" />
     </application>
 </manifest>
