@@ -16,6 +16,7 @@
 
 package com.android.systemui.shade
 
+import android.content.Context;
 import android.hardware.display.AmbientDisplayConfiguration
 import android.os.PowerManager
 import android.os.SystemClock
@@ -55,7 +56,8 @@ class PulsingGestureListener @Inject constructor(
         private val statusBarStateController: StatusBarStateController,
         private val shadeLogger: ShadeLogger,
         tunerService: TunerService,
-        dumpManager: DumpManager
+        dumpManager: DumpManager,
+        context: Context
 ) : GestureDetector.SimpleOnGestureListener(), Dumpable {
     private var doubleTapEnabled = false
     private var singleTapEnabled = false
@@ -67,8 +69,8 @@ class PulsingGestureListener @Inject constructor(
                 Settings.Secure.DOUBLE_TAP_TO_WAKE ->
                     doubleTapEnabledNative = TunerService.parseIntegerSwitch(value, false)
                 Settings.Secure.DOZE_DOUBLE_TAP_GESTURE ->
-                    doubleTapEnabled = ambientDisplayConfiguration.doubleTapGestureEnabled(
-                            UserHandle.USER_CURRENT)
+                    doubleTapEnabled = Settings.Secure.getIntForUser(context.getContentResolver(),
+                            Settings.Secure.DOZE_DOUBLE_TAP_GESTURE, 1, UserHandle.USER_CURRENT) == 1;
                 Settings.Secure.DOZE_TAP_SCREEN_GESTURE ->
                     singleTapEnabled = ambientDisplayConfiguration.tapGestureEnabled(
                             UserHandle.USER_CURRENT)
