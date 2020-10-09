@@ -10,6 +10,7 @@
     <dimen name="dismiss_all_button_height">55dp</dimen>
     <dimen name="dismiss_all_button_width">55dp</dimen>
     <dimen name="dismiss_all_button_margin_bottom">48dp</dimen>
+    <dimen name="dismiss_all_fab_src_size">24dp</dimen>
 
     <!-- Old style mobile data indicators -->
     <dimen name="status_bar_mobile_signal_with_type_width">18dp</dimen>
