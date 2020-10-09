@@ -2498,6 +2498,9 @@ public final class NotificationPanelViewController implements Dumpable {
             alpha *= mClockPositionResult.clockAlpha;
         }
         mNotificationStackScrollLayoutController.setAlpha(alpha);
+        if (mBarState != StatusBarState.KEYGUARD && !isFullyCollapsed()) {
+            mCentralSurfaces.updateDismissAllVisibility(true);
+        }
     }
 
     private float getFadeoutAlpha() {
@@ -2784,6 +2787,7 @@ public final class NotificationPanelViewController implements Dumpable {
     public void setIsLaunchAnimationRunning(boolean running) {
         boolean wasRunning = mIsLaunchAnimationRunning;
         mIsLaunchAnimationRunning = running;
+        mCentralSurfaces.updateDismissAllVisibility(false);
         if (wasRunning != mIsLaunchAnimationRunning) {
             mShadeExpansionStateManager.notifyLaunchingActivityChanged(running);
         }
