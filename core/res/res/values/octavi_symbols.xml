@@ -119,7 +119,4 @@
     <!-- Light / Regular style fonts -->
     <java-symbol type="string" name="config_lightFontFamily" />
     <java-symbol type="string" name="config_regularFontFamily" />
-
-    <!-- Ambient notification light color -->
-    <java-symbol type="integer" name="config_ambientNotificationDefaultColor" />
 </resources>
