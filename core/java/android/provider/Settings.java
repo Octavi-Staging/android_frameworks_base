@@ -12193,6 +12193,14 @@ public final class Settings {
         public static final String SECURE_LOCKSCREEN_QS_DISABLED = "secure_lockscreen_qs_disabled";
 
         /**
+         * Enable udfps detection even when screen is off
+         * Default value is 0
+         * @hide
+         */
+        @Readable
+        public static final String SCREEN_OFF_UDFPS_ENABLED = "screen_off_udfps_enabled";
+
+        /**
          * These entries are considered common between the personal and the managed profile,
          * since the managed profile doesn't get to change them.
          */
