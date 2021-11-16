@@ -30,4 +30,10 @@
     <!-- Network traffic monitor -->
     <dimen name="net_traffic_multi_text_size">8dp</dimen>
     <dimen name="net_traffic_txt_img_padding">4dp</dimen>
+
+    <!-- Width of the big battery circle icon in the status bar. -->
+    <dimen name="status_bar_battery_icon_big_circle_width">20.5dp</dimen>
+
+    <!-- Height of the big battery circle icon in the status bar. -->
+    <dimen name="status_bar_battery_icon_big_circle_height">@dimen/status_bar_battery_icon_big_circle_width</dimen>
 </resources>

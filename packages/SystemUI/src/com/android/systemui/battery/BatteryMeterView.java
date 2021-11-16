@@ -71,6 +71,8 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
     protected static final int BATTERY_STYLE_HIDDEN = 5;
     protected static final int BATTERY_STYLE_RLANDSCAPE = 6;
     protected static final int BATTERY_STYLE_LANDSCAPE = 7;
+    protected static final int BATTERY_STYLE_BIG_CIRCLE = 8;
+    protected static final int BATTERY_STYLE_BIG_DOTTED_CIRCLE = 9;
 
     @Retention(SOURCE)
     @IntDef({MODE_DEFAULT, MODE_ON, MODE_OFF, MODE_ESTIMATE})
@@ -527,12 +529,16 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height) * iconScaleFactor;
         mainBatteryHeight = mBatteryStyle == BATTERY_STYLE_LANDSCAPE || mBatteryStyle == BATTERY_STYLE_RLANDSCAPE ?
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape) : mainBatteryHeight;
+        mainBatteryHeight = mBatteryStyle == BATTERY_STYLE_BIG_CIRCLE || mBatteryStyle == BATTERY_STYLE_BIG_DOTTED_CIRCLE ?
+                res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_big_circle_height) : mainBatteryHeight;
         float mainBatteryWidth = mBatteryStyle == BATTERY_STYLE_CIRCLE || mBatteryStyle == BATTERY_STYLE_DOTTED_CIRCLE
                 || mBatteryStyle == BATTERY_STYLE_FULL_CIRCLE ?
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_circle_width) * iconScaleFactor :
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width);
         mainBatteryWidth = mBatteryStyle == BATTERY_STYLE_LANDSCAPE || mBatteryStyle == BATTERY_STYLE_RLANDSCAPE ?
                 res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape) : mainBatteryWidth;
+        mainBatteryWidth = mBatteryStyle == BATTERY_STYLE_BIG_CIRCLE || mBatteryStyle == BATTERY_STYLE_BIG_DOTTED_CIRCLE ?
+                res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_big_circle_width) : mainBatteryWidth;
 
         // If the battery is marked as overheated, we should display a shield indicating that the
         // battery is being "defended".
@@ -584,6 +590,8 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 break;
             case BATTERY_STYLE_CIRCLE:
             case BATTERY_STYLE_DOTTED_CIRCLE:
+            case BATTERY_STYLE_BIG_CIRCLE:
+            case BATTERY_STYLE_BIG_DOTTED_CIRCLE:
                 mCircleDrawable.setMeterStyle(mBatteryStyle);
                 mBatteryIconView.setImageDrawable(mCircleDrawable);
                 break;
