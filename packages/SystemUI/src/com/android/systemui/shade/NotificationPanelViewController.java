@@ -763,6 +763,8 @@ public final class NotificationPanelViewController implements Dumpable {
     private boolean mDoubleTapToSleepEnabled;
     private int mStatusBarHeaderHeight;
 
+    private boolean mBlockedGesturalNavigation = false;
+
     @Inject
     public NotificationPanelViewController(NotificationPanelView view,
             @Main Handler handler,
@@ -5459,6 +5461,10 @@ public final class NotificationPanelViewController implements Dumpable {
 
     private ShadeExpansionStateManager getShadeExpansionStateManager() {
         return mShadeExpansionStateManager;
+    }
+
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        mBlockedGesturalNavigation = blocked;
     }
 
     private final class NsslHeightChangedListener implements
