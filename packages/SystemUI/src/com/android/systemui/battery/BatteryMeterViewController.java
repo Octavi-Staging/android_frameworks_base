@@ -32,7 +32,6 @@ import androidx.annotation.NonNull;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.flags.FeatureFlags;
 import com.android.systemui.flags.Flags;
-import com.android.systemui.settings.UserTracker;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
@@ -115,16 +114,6 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
                 }
             };
 
-    private final UserTracker.Callback mUserChangedCallback =
-            new UserTracker.Callback() {
-                @Override
-                public void onUserChanged(int newUser, @NonNull Context userContext) {
-                    mContentResolver.unregisterContentObserver(mSettingObserver);
-                    registerShowBatteryPercentObserver(newUser);
-                    mView.updateShowPercent();
-                }
-            };
-
     // Some places may need to show the battery conditionally, and not obey the tuner
     private boolean mIgnoreTunerUpdates;
     private boolean mIsSubscribedForTunerUpdates;
@@ -132,7 +121,6 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
     @Inject
     public BatteryMeterViewController(
             BatteryMeterView view,
-            UserTracker userTracker,
             ConfigurationController configurationController,
             TunerService tunerService,
             @Main Handler mainHandler,
@@ -140,7 +128,6 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
             FeatureFlags featureFlags,
             BatteryController batteryController) {
         super(view);
-        mUserTracker = userTracker;
         mConfigurationController = configurationController;
         mTunerService = tunerService;
         mMainHandler = mainHandler;
