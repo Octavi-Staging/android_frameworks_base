@@ -242,6 +242,7 @@ import com.android.systemui.statusbar.policy.ConfigurationController.Configurati
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController.DeviceProvisionedListener;
 import com.android.systemui.statusbar.policy.ExtensionController;
+import com.android.systemui.statusbar.policy.GameSpaceManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
@@ -508,6 +509,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private final Lazy<LightRevealScrimViewModel> mLightRevealScrimViewModelLazy;
 
     private final PulseControllerImpl mPulseController;
+    protected GameSpaceManager mGameSpaceManager;
 
     /** Controller for the Shade. */
     @VisibleForTesting
@@ -892,6 +894,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
         mActivityIntentHelper = new ActivityIntentHelper(mContext);
         mActivityLaunchAnimator = activityLaunchAnimator;
+        mGameSpaceManager = new GameSpaceManager(mContext, mKeyguardStateController);
 
         // The status bar background may need updating when the ongoing call status changes.
         mOngoingCallController.addCallback((animate) -> maybeUpdateBarMode());
@@ -1533,6 +1536,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_CAMERA_GESTURE);
         mBroadcastDispatcher.registerReceiver(mBroadcastReceiver, filter, null, UserHandle.ALL);
+        mGameSpaceManager.observe();
     }
 
     @Override
@@ -4289,6 +4293,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     }
 
     // End Extra BaseStatusBarMethods.
+
+    @Override
+    public GameSpaceManager getGameSpaceManager() {
+        return mGameSpaceManager;
+    }
 
     boolean isTransientShown() {
         return mTransientShown;
