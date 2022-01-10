@@ -89,5 +89,6 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.SENSOR_BLOCK,
         Settings.System.FULLSCREEN_GESTURES,
+        Settings.System.ENABLE_RIPPLE_EFFECT,
     };
 }
