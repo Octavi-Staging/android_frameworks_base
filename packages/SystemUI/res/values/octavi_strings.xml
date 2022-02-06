@@ -65,4 +65,6 @@
     <!-- Volte/VoWiFi Icon -->
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
 
+    <!-- Google Lens Screenshot string -->
+    <string name="lensss">Lens</string>
 </resources>
