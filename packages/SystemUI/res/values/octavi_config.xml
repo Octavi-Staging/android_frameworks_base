@@ -31,4 +31,7 @@
 
     <!-- The number of rows in the QuickSettings -->
     <integer name="quick_settings_max_rows_custom">4</integer>
+
+    <!-- Udfps display mode provider class name -->
+    <string name="config_udfpsDisplayModeProviderComponent">com.android.systemui.biometrics.DummyUdfpsDisplayModeProvider</string>
 </resources>
