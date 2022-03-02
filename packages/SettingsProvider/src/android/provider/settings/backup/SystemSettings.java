@@ -97,5 +97,6 @@ public class SystemSettings {
         Settings.System.EDGE_LIGHT_REPEAT_ANIMATION,
         Settings.System.EDGE_LIGHT_COLOR_MODE,
         Settings.System.EDGE_LIGHT_CUSTOM_COLOR,
+        Settings.System.USE_OLD_MOBILETYPE,
     };
 }
