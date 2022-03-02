@@ -103,5 +103,6 @@ public class SystemSettings {
         Settings.System.QS_TILE_VERTICAL_LAYOUT,
         Settings.System.QS_LAYOUT,
         Settings.System.QQS_LAYOUT,
+        Settings.System.USE_OLD_MOBILETYPE,
     };
 }
