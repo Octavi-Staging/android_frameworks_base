@@ -6173,6 +6173,28 @@ public final class Settings {
         public static final String NETWORK_TRAFFIC_VIEW_LOCATION = "network_traffic_view_location";
 
         /**
+         * Whether to show brightness slider in qqs.
+         * Default 0.
+         * @hide
+         */
+        public static final String QQS_SHOW_BRIGHTNESS = "qqs_show_brightness";
+
+        /**
+         * Whether to show auto brightness button to the end of brightness slider.
+         * Default 0.
+         * @hide
+         */
+        public static final String SHOW_AUTO_BRIGHTNESS_BUTTON = "show_auto_brightness_button";
+
+        /**
+         * Position of the brightness slider (applies to qqs as well).
+         * 0 - Top (Default).
+         * 1 - Bottom.
+         * @hide
+         */
+        public static final String BRIGHTNESS_SLIDER_POSITION = "brightness_slider_position";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

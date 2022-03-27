@@ -96,5 +96,8 @@ public class SystemSettings {
         Settings.System.NETWORK_TRAFFIC_ARROW,
         Settings.System.NETWORK_TRAFFIC_FONT_SIZE,
         Settings.System.NETWORK_TRAFFIC_VIEW_LOCATION,
+        Settings.System.QQS_SHOW_BRIGHTNESS,
+        Settings.System.SHOW_AUTO_BRIGHTNESS_BUTTON,
+        Settings.System.BRIGHTNESS_SLIDER_POSITION,
     };
 }
