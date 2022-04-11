@@ -28,6 +28,7 @@ import com.android.systemui.qs.tiles.ScreenshotTile
 import com.android.systemui.qs.tiles.SoundTile
 import com.android.systemui.qs.tiles.SyncTile
 import com.android.systemui.qs.tiles.WifiTile
+import com.android.systemui.qs.tiles.PreferredNetworkTile
 
 import dagger.Binds
 import dagger.Module
@@ -101,4 +102,11 @@ interface OctaviModule {
     @IntoMap
     @StringKey(WifiTile.TILE_SPEC)
     fun bindWifiTile(wifiTile: WifiTile): QSTileImpl<*>
+
+    /** Inject PreferredNetworkTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(PreferredNetworkTile.TILE_SPEC)
+    fun bindPreferredNetworkTile(preferredNetworkTile: PreferredNetworkTile): QSTileImpl<*>
+
 }
