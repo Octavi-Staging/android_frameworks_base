@@ -29,6 +29,7 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.text.TextUtils;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
@@ -37,6 +38,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import com.android.internal.R;
 
@@ -220,5 +222,21 @@ public class OctaviUtils {
         boolean maskDisplayCutout = context.getResources().getBoolean(R.bool.config_maskMainBuiltInDisplayCutout);
         boolean displayCutoutExists = (!TextUtils.isEmpty(displayCutout) && !maskDisplayCutout);
         return displayCutoutExists;
+    }
+
+
+    public static class QSLayoutUtils {
+
+        public static boolean getQSTileLabelHide(Context context) {
+            return Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_TILE_LABEL_HIDE,
+                    0, UserHandle.USER_CURRENT) == 1;
+        }
+
+        public static boolean getQSTileVerticalLayout(Context context) {
+            return Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_TILE_VERTICAL_LAYOUT,
+                    0, UserHandle.USER_CURRENT) == 1;
+        }
     }
 }
