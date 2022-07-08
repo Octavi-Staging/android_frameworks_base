@@ -221,5 +221,6 @@ public class SecureSettings {
         Settings.Secure.BLUETOOTH_LE_BROADCAST_APP_SOURCE_NAME,
         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
         Settings.Secure.SECURE_LOCKSCREEN_QS_DISABLED,
+        Settings.Secure.SHOW_WIFI_STANDARD_ICON,
     };
 }

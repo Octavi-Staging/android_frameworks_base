@@ -67,6 +67,7 @@ import com.android.systemui.statusbar.pipeline.wifi.ui.WifiUiAdapter;
 import com.android.systemui.statusbar.pipeline.wifi.ui.view.ModernStatusBarWifiView;
 import com.android.systemui.statusbar.pipeline.wifi.ui.viewmodel.LocationBasedWifiViewModel;
 import com.android.systemui.statusbar.policy.NetworkTrafficSB;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Assert;
 
 import java.util.ArrayList;
@@ -389,8 +390,7 @@ public interface StatusBarIconController {
     /**
      * Turns info from StatusBarIconController into ImageViews in a ViewGroup.
      */
-
-    class IconManager implements DemoModeCommandReceiver {
+    class IconManager implements DemoModeCommandReceiver, TunerService.Tunable {
         protected final ViewGroup mGroup;
         private final StatusBarPipelineFlags mStatusBarPipelineFlags;
         private final MobileContextProvider mMobileContextProvider;
@@ -414,6 +414,10 @@ public interface StatusBarIconController {
         protected ArrayList<String> mBlockList = new ArrayList<>();
 
         private final boolean mNewIconStyle;
+
+        private boolean mShowWifiStandard;
+
+        private static final String SHOW_WIFI_STANDARD_ICON = Settings.Secure.SHOW_WIFI_STANDARD_ICON;
 
         public IconManager(
                 ViewGroup group,
@@ -539,6 +543,7 @@ public interface StatusBarIconController {
             final StatusBarWifiView view = onCreateStatusBarWifiView(slot);
             view.applyWifiState(state);
             mGroup.addView(view, index, onCreateLayoutParams());
+            Dependency.get(TunerService.class).addTunable(this, SHOW_WIFI_STANDARD_ICON);
 
             if (mIsInDemoMode) {
                 mDemoStatusIcons.addDemoWifiView(state);
@@ -669,6 +674,7 @@ public interface StatusBarIconController {
 
         protected void destroy() {
             mGroup.removeAllViews();
+            Dependency.get(TunerService.class).removeTunable(this);
         }
 
         protected void onIconExternal(int viewIndex, int height) {
@@ -840,6 +846,29 @@ public interface StatusBarIconController {
                 final View child = mGroup.getChildAt(i);
                 if (child instanceof StatusBarMobileView) {
                     ((StatusBarMobileView) child).updateDisplayType(mIsOldSignalStyle);
+                }
+            }
+        }
+
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            switch (key) {
+                case SHOW_WIFI_STANDARD_ICON:
+                    mShowWifiStandard =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                    updateShowWifiStandard();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void updateShowWifiStandard() {
+            for (int i = 0; i < mGroup.getChildCount(); i++) {
+                View child = mGroup.getChildAt(i);
+                if (child instanceof StatusBarWifiView) {
+                    ((StatusBarWifiView) child).updateWifiState(mShowWifiStandard);
+                    return;
                 }
             }
         }
