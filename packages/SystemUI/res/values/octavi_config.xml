@@ -77,4 +77,7 @@
           <item>255,33</item>
           -->
     </string-array>
+
+    <!-- Udfps vendor code -->
+    <integer name="config_udfpsVendorCode">0</integer>
 </resources>
