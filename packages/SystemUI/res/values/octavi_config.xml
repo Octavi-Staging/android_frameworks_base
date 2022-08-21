@@ -65,4 +65,7 @@
 
     <!-- FPS measure interval in milliseconds, default 1000 -->
     <integer name="config_fpsReadInterval">1000</integer>
+
+    <!-- Udfps vendor code -->
+    <integer name="config_udfpsVendorCode">22</integer>
 </resources>
