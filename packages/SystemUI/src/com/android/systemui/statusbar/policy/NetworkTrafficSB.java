@@ -52,6 +52,8 @@ import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.statusbar.StatusIconDisplayable;
 
+import java.util.ArrayList;
+
 /*
 *
 * Seeing how an Integer object in java requires at least 16 Bytes, it seemed awfully wasteful
@@ -472,8 +474,8 @@ public class NetworkTrafficSB extends TextView implements StatusIconDisplayable 
     }
 
     @Override
-    public void onDarkChanged(Rect area, float darkIntensity, int tint) {
-        mTintColor = DarkIconDispatcher.getTint(area, this, tint);
+    public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
+        mTintColor = DarkIconDispatcher.getTint(areas, this, tint);
         setTextColor(mTintColor);
         updateTrafficDrawable();
     }
