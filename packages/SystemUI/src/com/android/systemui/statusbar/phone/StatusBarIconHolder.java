@@ -24,6 +24,7 @@ import android.os.UserHandle;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.statusbar.connectivity.ImsIconState;
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.BluetoothIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.MobileIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.WifiIconState;
@@ -65,6 +66,7 @@ public class StatusBarIconHolder {
     @Deprecated
     public static final int TYPE_WIFI_NEW = 4;
     public static final int TYPE_IMS = 5;
+    public static final int TYPE_BLUETOOTH = 6;
 
     @IntDef({
             TYPE_ICON,
@@ -72,7 +74,8 @@ public class StatusBarIconHolder {
             TYPE_MOBILE,
             TYPE_MOBILE_NEW,
             TYPE_WIFI_NEW,
-            TYPE_IMS
+            TYPE_IMS,
+            TYPE_BLUETOOTH
     })
     @Retention(RetentionPolicy.SOURCE)
     @interface IconType {}
@@ -82,6 +85,8 @@ public class StatusBarIconHolder {
     private MobileIconState mMobileState;
     private ImsIconState mImsState;
     private @IconType int mType = TYPE_ICON;
+    private BluetoothIconState mBluetoothState;
+
     private int mTag = 0;
 
     private StatusBarIconHolder() {
@@ -133,6 +138,14 @@ public class StatusBarIconHolder {
         holder.mMobileState = state;
         holder.mType = TYPE_MOBILE;
         holder.mTag = state.subId;
+        return holder;
+    }
+
+    /** */
+    public static StatusBarIconHolder fromBluetoothIconState(BluetoothIconState state) {
+        StatusBarIconHolder holder = new StatusBarIconHolder();
+        holder.mBluetoothState = state;
+        holder.mType = TYPE_BLUETOOTH;
         return holder;
     }
 
@@ -203,6 +216,16 @@ public class StatusBarIconHolder {
         mImsState = state;
     }
 
+    @Nullable
+    public BluetoothIconState getBluetoothState() {
+        return mBluetoothState;
+    }
+
+    public void setBluetoothState(BluetoothIconState state) {
+        mBluetoothState = state;
+    }
+
+
     public boolean isVisible() {
         switch (mType) {
             case TYPE_ICON:
@@ -218,6 +241,8 @@ public class StatusBarIconHolder {
                 return true;
             case TYPE_IMS:
                 return mImsState.visible;
+            case TYPE_BLUETOOTH:
+                return mBluetoothState.visible;
             default: return true;
         }
     }
@@ -247,6 +272,10 @@ public class StatusBarIconHolder {
                 break;
             case TYPE_IMS:
                 mImsState.visible = visible;
+                break;
+
+            case TYPE_BLUETOOTH:
+                mBluetoothState.visible = visible;
                 break;
         }
     }
