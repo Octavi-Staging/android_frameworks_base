@@ -80,8 +80,8 @@ public class GlobalActionsComponent extends CoreStartable
     }
 
     @Override
-    public void handleShowShutdownUi(boolean isReboot, String reason, boolean rebootCustom) {
-        mExtension.get().showShutdownUi(isReboot, reason, rebootCustom);
+    public void handleShowShutdownUi(boolean isReboot, String reason) {
+        mExtension.get().showShutdownUi(isReboot, reason);
     }
 
     @Override
@@ -116,9 +116,9 @@ public class GlobalActionsComponent extends CoreStartable
     }
 
     @Override
-    public void reboot(boolean safeMode, String reason) {
+    public void reboot(boolean safeMode) {
         try {
-            mBarService.reboot(safeMode, reason);
+            mBarService.reboot(safeMode);
         } catch (RemoteException e) {
         }
     }
