@@ -132,4 +132,7 @@
     <string name="accessibility_quick_settings_heads_up_changed_off">Heads up turned off.</string>
     <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
 
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Long press for partial screenshot</string>
+
 </resources>
