@@ -128,4 +128,6 @@
     <!-- Text to use when the number in a notification info is too large -->
     <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
 
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Long press for partial screenshot</string>
 </resources>
