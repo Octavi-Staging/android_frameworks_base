@@ -22,6 +22,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
 import static android.view.WindowManager.ScreenshotSource.SCREENSHOT_GLOBAL_ACTIONS;
 import static android.view.WindowManager.TAKE_SCREENSHOT_FULLSCREEN;
+import static android.view.WindowManager.TAKE_SCREENSHOT_SELECTED_REGION;
 
 import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.SOME_AUTH_REQUIRED_AFTER_USER_REQUEST;
 import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_NOT_REQUIRED;
@@ -69,8 +70,6 @@ import android.provider.Settings;
 import android.service.dreams.IDreamManager;
 import android.sysprop.TelephonyProperties;
 import android.telecom.TelecomManager;
-import android.telephony.ServiceState;
-import android.telephony.TelephonyCallback;
 import android.telephony.TelephonyManager;
 import android.util.ArraySet;
 import android.util.Log;
@@ -136,7 +135,6 @@ import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
-import com.android.systemui.telephony.TelephonyListenerManager;
 import com.android.systemui.util.EmergencyDialerConstants;
 import com.android.systemui.util.RingerModeTracker;
 import com.android.systemui.util.settings.GlobalSettings;
@@ -188,8 +186,8 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     static final String GLOBAL_ACTION_KEY_EMERGENCY = "emergency";
     static final String GLOBAL_ACTION_KEY_SCREENSHOT = "screenshot";
     private static final String GLOBAL_ACTION_KEY_ADVANCED_RESTART = "advanced";
-    private static final String GLOBAL_ACTION_KEY_TORCH = "torch"
-    static final String GLOBAL_ACTION_KEY_DEVICECONTROLS = "devicecontrols";
+    private static final String GLOBAL_ACTION_KEY_FLASHLIGHT = "flashlight";
+    static final String GLOBAL_ACTION_KEY_DEVICE_CONTROLS = "devicecontrols";
 
     // See NotificationManagerService#scheduleDurationReachedLocked
     private static final long TOAST_FADE_TIME = 333;
@@ -206,7 +204,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     private final IDreamManager mDreamManager;
     private final DevicePolicyManager mDevicePolicyManager;
     private final LockPatternUtils mLockPatternUtils;
-    private final TelephonyListenerManager mTelephonyListenerManager;
     private final KeyguardStateController mKeyguardStateController;
     private final BroadcastDispatcher mBroadcastDispatcher;
     protected final GlobalSettings mGlobalSettings;
@@ -347,7 +344,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
             DevicePolicyManager devicePolicyManager,
             LockPatternUtils lockPatternUtils,
             BroadcastDispatcher broadcastDispatcher,
-            TelephonyListenerManager telephonyListenerManager,
             GlobalSettings globalSettings,
             SecureSettings secureSettings,
             @NonNull VibratorHelper vibrator,
@@ -378,7 +374,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         mDreamManager = iDreamManager;
         mDevicePolicyManager = devicePolicyManager;
         mLockPatternUtils = lockPatternUtils;
-        mTelephonyListenerManager = telephonyListenerManager;
         mKeyguardStateController = keyguardStateController;
         mBroadcastDispatcher = broadcastDispatcher;
         mGlobalSettings = globalSettings;
@@ -414,7 +409,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         mHasTelephony = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
 
         // get notified of phone state changes
-        mTelephonyListenerManager.addServiceStateListener(mPhoneStateListener);
         mGlobalSettings.registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON), true,
                 mAirplaneModeObserver);
@@ -443,7 +437,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
      */
     public void destroy() {
         mBroadcastDispatcher.unregisterReceiver(mBroadcastReceiver);
-        mTelephonyListenerManager.removeServiceStateListener(mPhoneStateListener);
         mGlobalSettings.unregisterContentObserver(mAirplaneModeObserver);
         mConfigurationController.removeCallback(this);
     }
@@ -652,7 +645,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
 
         // make sure emergency affordance action is first, if needed
         if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.POWERMENU_EMERGENCY, 0) == 1) {
+                Settings.System.GLOBAL_ACTIONS_EMERGENCY, 0) == 1) {
             addIfShouldShowAction(tempActions, new EmergencyAffordanceAction());
             addedKeys.add(GLOBAL_ACTION_KEY_EMERGENCY);
         }
@@ -665,12 +658,12 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
             }
             if (GLOBAL_ACTION_KEY_POWER.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_POWER, 1) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_POWER, 1) == 1) {
                     addIfShouldShowAction(tempActions, shutdownAction);
                 }
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_AIRPLANE, 0) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_AIRPLANE, 0) == 1) {
                     addIfShouldShowAction(tempActions, mAirplaneModeOn);
                 }
             } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
@@ -679,28 +672,28 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 }
             } else if (GLOBAL_ACTION_KEY_SILENT.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_SOUNDPANEL, 0) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_SOUNDPANEL, 0) == 1) {
                     addIfShouldShowAction(tempActions, mSilentModeAction);
                 }
             } else if (GLOBAL_ACTION_KEY_USERS.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_USERS, 0) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_USERS, 0) == 1) {
                     addUserActions(tempActions, currentUser.get());
                 }
             } else if (GLOBAL_ACTION_KEY_SETTINGS.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_SETTINGS, 0) != 0) {
+                        Settings.System.GLOBAL_ACTIONS_SETTINGS, 0) != 0) {
                     addIfShouldShowAction(tempActions, getSettingsAction());
                 }
             } else if (GLOBAL_ACTION_KEY_LOCKDOWN.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_LOCKDOWN, 0) != 0) {
+                        Settings.System.GLOBAL_ACTIONS_LOCKDOWN, 0) != 0) {
                     addIfShouldShowAction(tempActions, new LockDownAction());
                 }
-            } else if (GLOBAL_ACTION_KEY_TORCH.equals(actionKey)) {
+            } else if (GLOBAL_ACTION_KEY_FLASHLIGHT.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_TORCH, 0) != 0) {
-                    addIfShouldShowAction(tempActions, getTorchToggleAction());
+                        Settings.System.GLOBAL_ACTIONS_FLASHLIGHT, 0) != 0) {
+                    addIfShouldShowAction(tempActions, getFlashlightToggleAction());
                 }
             } else if (GLOBAL_ACTION_KEY_VOICEASSIST.equals(actionKey)) {
                 addIfShouldShowAction(tempActions, getVoiceAssistAction());
@@ -708,12 +701,12 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 addIfShouldShowAction(tempActions, getAssistAction());
             } else if (GLOBAL_ACTION_KEY_RESTART.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_RESTART, 1) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_RESTART, 1) == 1) {
                     addIfShouldShowAction(tempActions, restartAction);
                 }
             } else if (GLOBAL_ACTION_KEY_ADVANCED_RESTART.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_ADVANCED, 1) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_ADVANCED, 1) == 1) {
                     mPowerItems.add(restartRecoveryAction);
                     mPowerItems.add(restartBootloaderAction);
                     mPowerItems.add(restartSystemUiAction);
@@ -721,7 +714,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 }
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_SCREENSHOT, 0) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_SCREENSHOT, 1) == 1) {
                     addIfShouldShowAction(tempActions, new ScreenshotAction());
                 }
             } else if (GLOBAL_ACTION_KEY_LOGOUT.equals(actionKey)) {
@@ -729,7 +722,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 // hardcode it to USER_SYSTEM so it properly supports headless system user mode
                 // (and then call mDevicePolicyManager.clearLogoutUser() after switched)
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_LOGOUT, 0) == 1
+                        Settings.System.GLOBAL_ACTIONS_LOGOUT, 0) == 1
                         && currentUser.get() != null
                         && currentUser.get().id != UserHandle.USER_SYSTEM) {
                     addIfShouldShowAction(tempActions, new LogoutAction());
@@ -737,13 +730,13 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
             } else if (GLOBAL_ACTION_KEY_EMERGENCY.equals(actionKey)) {
                 if (shouldDisplayEmergency()) {
                     if (Settings.System.getInt(mContext.getContentResolver(),
-                            Settings.System.POWERMENU_EMERGENCY, 0) == 1) {
+                            Settings.System.GLOBAL_ACTIONS_EMERGENCY, 0) == 1) {
                         addIfShouldShowAction(tempActions, new EmergencyDialerAction());
                     }
                 }
-            } else if (GLOBAL_ACTION_KEY_DEVICECONTROLS.equals(actionKey)) {
+            } else if (GLOBAL_ACTION_KEY_DEVICE_CONTROLS.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_DEVICECONTROLS, 0) == 1) {
+                        Settings.System.GLOBAL_ACTIONS_DEVICE_CONTROLS, 0) == 1) {
                     addIfShouldShowAction(tempActions, new DeviceControlsAction());
                 }
             } else {
@@ -1031,7 +1024,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     }
 
     @VisibleForTesting
-    class ScreenshotAction extends SinglePressAction {
+    class ScreenshotAction extends SinglePressAction implements LongPressAction {
         ScreenshotAction() {
             super(R.drawable.ic_screenshot, R.string.global_action_screenshot);
         }
@@ -1051,6 +1044,13 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                     mUiEventLogger.log(GlobalActionsEvent.GA_SCREENSHOT_PRESS);
                 }
             }, mDialogPressDelay);
+        }
+
+        @Override
+        public boolean onLongPress() {
+            mScreenshotHelper.takeScreenshot(TAKE_SCREENSHOT_SELECTED_REGION, true, true,
+                    SCREENSHOT_GLOBAL_ACTIONS, mHandler, null);
+            return true;
         }
 
         @Override
@@ -1083,7 +1083,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         }
     };
 
-    private Action getTorchToggleAction() {
+    private Action getFlashlightToggleAction() {
         return new SinglePressAction(com.android.internal.R.drawable.ic_qs_flashlight,
                 com.android.systemui.R.string.quick_settings_flashlight_label) {
 
@@ -2306,24 +2306,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         }
     };
 
-    private final TelephonyCallback.ServiceStateListener mPhoneStateListener =
-            new TelephonyCallback.ServiceStateListener() {
-        @Override
-        public void onServiceStateChanged(ServiceState serviceState) {
-            if (!mHasTelephony) return;
-            if (mAirplaneModeOn == null) {
-                Log.d(TAG, "Service changed before actions created");
-                return;
-            }
-            final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF;
-            mAirplaneState = inAirplaneMode ? ToggleState.On : ToggleState.Off;
-            mAirplaneModeOn.updateState(mAirplaneState);
-            mAdapter.notifyDataSetChanged();
-            mOverflowAdapter.notifyDataSetChanged();
-            mPowerAdapter.notifyDataSetChanged();
-        }
-    };
-
     private final ContentObserver mAirplaneModeObserver = new ContentObserver(mMainHandler) {
         @Override
         public void onChange(boolean selfChange) {
@@ -2365,7 +2347,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
 
     private void onAirplaneModeChanged() {
         // Let the service state callbacks handle the state.
-        if (mHasTelephony || mAirplaneModeOn == null) return;
+        if (mAirplaneModeOn == null) return;
 
         boolean airplaneModeOn = mGlobalSettings.getInt(
                 Settings.Global.AIRPLANE_MODE_ON,
