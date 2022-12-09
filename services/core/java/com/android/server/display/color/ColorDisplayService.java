@@ -758,7 +758,8 @@ public final class ColorDisplayService extends SystemService {
         mDisplayWhiteBalanceTintController.setActivated(isDisplayWhiteBalanceSettingEnabled()
                 && !mNightDisplayTintController.isActivated()
                 && !isAccessibilityEnabled()
-                && dtm.needsLinearColorMatrix());
+                && dtm.needsLinearColorMatrix()
+                && mDisplayWhiteBalanceTintController.isAllowed());
         boolean activated = mDisplayWhiteBalanceTintController.isActivated();
 
         if (mDisplayWhiteBalanceListener != null && oldActivated != activated) {
@@ -974,6 +975,8 @@ public final class ColorDisplayService extends SystemService {
                         R.array.config_availableColorModes);
                 if (availableColorModes.length > 0) {
                     colorMode = availableColorModes[0];
+                } else {
+                    colorMode = NOT_SET;
                 }
             }
         }
@@ -1488,6 +1491,12 @@ public final class ColorDisplayService extends SystemService {
      */
     public class ColorDisplayServiceInternal {
 
+        /** Sets whether DWB should be allowed in the current state. */
+        public void setDisplayWhiteBalanceAllowed(boolean allowed)  {
+            mDisplayWhiteBalanceTintController.setAllowed(allowed);
+            updateDisplayWhiteBalanceStatus();
+        }
+
         /**
          * Set the current CCT value for the display white balance transform, and if the transform
          * is enabled, apply it.
@@ -1548,6 +1557,10 @@ public final class ColorDisplayService extends SystemService {
          */
         public boolean isReduceBrightColorsActivated() {
             return mReduceBrightColorsTintController.isActivated();
+        }
+
+        public int getReduceBrightColorsStrength() {
+            return mReduceBrightColorsTintController.getStrength();
         }
 
         /**

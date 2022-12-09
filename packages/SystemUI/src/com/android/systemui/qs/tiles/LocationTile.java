@@ -48,8 +48,6 @@ import javax.inject.Inject;
 /** Quick settings tile: Location **/
 public class LocationTile extends QSTileImpl<BooleanState> {
 
-    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_location);
-
     private static final int BATTERY_SAVING = Settings.Secure.LOCATION_MODE_BATTERY_SAVING;
     private static final int SENSORS_ONLY = Settings.Secure.LOCATION_MODE_SENSORS_ONLY;
     private static final int HIGH_ACCURACY = Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
@@ -149,7 +147,8 @@ public class LocationTile extends QSTileImpl<BooleanState> {
                 state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_gps_only);
                 state.label = mContext.getString(R.string.quick_settings_location_label);
                 state.secondaryLabel = mContext.getString(R.string.quick_settings_location_secondary_gps_only);
-                state.icon = mIcon;
+                state.icon = ResourceIcon.get(state.value
+                        ? R.drawable.qs_location_icon_on : R.drawable.qs_location_icon_off);
                 state.state = Tile.STATE_ACTIVE;
                 break;
             case HIGH_ACCURACY:
@@ -165,7 +164,8 @@ public class LocationTile extends QSTileImpl<BooleanState> {
                 state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_off);
                 state.label = mContext.getString(R.string.quick_settings_location_label);
                 state.secondaryLabel = mContext.getString(R.string.quick_settings_secondary_location_off);
-                state.icon = mIcon;
+                state.icon = ResourceIcon.get(state.value
+                        ? R.drawable.qs_location_icon_on : R.drawable.qs_location_icon_off);
                 state.state = Tile.STATE_INACTIVE;
                 break;
         }

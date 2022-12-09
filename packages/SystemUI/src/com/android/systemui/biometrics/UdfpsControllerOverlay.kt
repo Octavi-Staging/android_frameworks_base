@@ -77,8 +77,7 @@ class UdfpsControllerOverlay(
     private val systemClock: SystemClock,
     private val keyguardStateController: KeyguardStateController,
     private val unlockedScreenOffAnimationController: UnlockedScreenOffAnimationController,
-    private val halControlsIllumination: Boolean,
-    private var hbmProvider: UdfpsHbmProvider,
+    private var udfpsDisplayModeProvider: UdfpsDisplayModeProvider,
     val requestId: Long,
     @ShowReason val requestReason: Int,
     private val controllerCallback: IUdfpsOverlayControllerCallback,
@@ -148,8 +147,7 @@ class UdfpsControllerOverlay(
                     R.layout.udfps_view, null, false
                 ) as UdfpsView).apply {
                     overlayParams = params
-                    halControlsIllumination = this@UdfpsControllerOverlay.halControlsIllumination
-                    setHbmProvider(hbmProvider)
+                    setUdfpsDisplayModeProvider(udfpsDisplayModeProvider)
                     val animation = inflateUdfpsAnimation(this, controller)
                     if (animation != null) {
                         animation.init()
@@ -258,8 +256,8 @@ class UdfpsControllerOverlay(
         val wasShowing = isShowing
 
         overlayView?.apply {
-            if (isIlluminationRequested) {
-                stopIllumination()
+            if (isDisplayConfigured) {
+                unconfigureDisplay()
             }
             windowManager.removeView(this)
             setOnTouchListener(null)
