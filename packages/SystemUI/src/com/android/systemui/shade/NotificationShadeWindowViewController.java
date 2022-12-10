@@ -23,6 +23,8 @@ import android.media.AudioManager;
 import android.media.session.MediaSessionLegacyHelper;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.InputDevice;
