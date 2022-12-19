@@ -119,7 +119,6 @@ import android.util.Log;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.Immutable;
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.gmscompat.AttestationHooks;
 import com.android.internal.os.SomeArgs;
 import com.android.internal.util.UserIcons;
 
@@ -809,8 +808,7 @@ public class ApplicationPackageManager extends PackageManager {
 
     @Override
     public boolean hasSystemFeature(String name, int version) {
-        return AttestationHooks.hasSystemFeature(name,
-                mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version)));
+        return mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version));
     }
 
     /** @hide */
