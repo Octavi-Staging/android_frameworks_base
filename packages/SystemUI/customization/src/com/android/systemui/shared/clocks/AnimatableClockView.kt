@@ -23,6 +23,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.Layout
 import android.text.TextUtils
 import android.text.format.DateFormat
@@ -42,6 +44,8 @@ import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.max
 import kotlin.math.min
+
+import android.provider.Settings.Secure
 
 /**
  * Displays the time with the hour positioned above the minutes. (ie: 09 above 30 is 9:30)
@@ -233,8 +237,16 @@ class AnimatableClockView @JvmOverloads constructor(
     }
 
     fun setColors(@ColorInt dozingColor: Int, lockScreenColor: Int) {
-        this.dozingColor = dozingColor
+        val isCustomClockColorEnabled = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.KG_CUSTOM_CLOCK_COLOR_ENABLED, 0, UserHandle.USER_CURRENT) != 0
+        val customClockColor = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.KG_CUSTOM_CLOCK_COLOR, 0xFFFFFFFF.toInt(), UserHandle.USER_CURRENT)
+        if (isCustomClockColorEnabled) {
+              this.lockScreenColor = customClockColor
+        } else {        
         this.lockScreenColor = lockScreenColor
+        }
+        this.dozingColor = dozingColor
     }
 
     fun animateColorChange() {
