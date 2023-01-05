@@ -1462,7 +1462,6 @@ public class CentralSurfacesImpl extends CoreStartable implements
         mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon);
         mDismissAllButton.setElevation(mContext.getResources().getDimension(R.dimen.dismiss_all_button_elevation));
         mDismissAllButton.setColorFilter(mContext.getColor(R.color.notif_pill_text));
-        mDismissAllButton.setBackground(mContext.getTheme().getDrawable(R.drawable.dismiss_all_background));
     }
 
     @Override
