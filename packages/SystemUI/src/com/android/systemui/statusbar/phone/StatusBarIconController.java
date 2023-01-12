@@ -58,8 +58,8 @@ import com.android.systemui.statusbar.policy.NetworkTrafficSB;
 import com.android.systemui.statusbar.pipeline.StatusBarPipelineFlags;
 import com.android.systemui.statusbar.pipeline.wifi.ui.view.ModernStatusBarWifiView;
 import com.android.systemui.statusbar.pipeline.wifi.ui.viewmodel.WifiViewModel;
-import com.android.systemui.util.Assert;
 import com.android.systemui.tuner.TunerService;
+import com.android.systemui.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;

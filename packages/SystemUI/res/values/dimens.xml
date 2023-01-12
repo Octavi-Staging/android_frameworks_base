@@ -1538,13 +1538,6 @@
     <dimen name="media_output_broadcast_info_summary_height">20dp</dimen>
     <dimen name="media_output_broadcast_info_edit">18dp</dimen>
 
-    <!-- Old style mobile data indicators -->
-    <dimen name="status_bar_mobile_signal_with_type_width">18dp</dimen>
-    <dimen name="status_bar_mobile_signal_width">16dp</dimen>
-    <dimen name="status_bar_mobile_type_height">8dp</dimen>
-    <dimen name="status_bar_mobile_type_padding">2dp</dimen>
-    <dimen name="status_bar_mobile_type_padding_limit">10dp</dimen>
-
     <!-- Broadcast dialog -->
     <dimen name="broadcast_dialog_title_img_margin_top">18dp</dimen>
     <dimen name="broadcast_dialog_title_text_size">24sp</dimen>
@@ -1574,4 +1567,5 @@
     <dimen name="dream_overlay_status_bar_ambient_text_shadow_dx">0.5dp</dimen>
     <dimen name="dream_overlay_status_bar_ambient_text_shadow_dy">0.5dp</dimen>
     <dimen name="dream_overlay_status_bar_ambient_text_shadow_radius">2dp</dimen>
+
 </resources>
