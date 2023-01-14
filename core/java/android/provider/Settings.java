@@ -6119,6 +6119,17 @@ public final class Settings {
         public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
 
         /**
+         * Bottom screen shortcuts on keyguard
+         * Two lists of strings delimeted by ;
+         * Each list of string is delimited by ,
+         * Valid strings are: home, wallet, qr, camera, flashlight and none
+         * The order in each list decides the priority for each shortcut
+         * @hide
+         */
+        @Readable
+        public static final String KEYGUARD_QUICK_TOGGLES = "keyguard_quick_toggles";
+
+        /**
          * Color temperature of the display during the day
          * @hide
          */
