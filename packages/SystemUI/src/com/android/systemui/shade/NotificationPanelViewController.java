@@ -1344,6 +1344,7 @@ public final class NotificationPanelViewController implements Dumpable {
                 mResources.getDimensionPixelSize(R.dimen.split_shade_full_transition_distance);
 
         mEnableQsClipping = mResources.getBoolean(R.bool.qs_enable_clipping);
+        mCentralSurfaces.updateDismissAllVisibility(mBarState != StatusBarState.KEYGUARD && !isFullyCollapsed() && !isPanelVisibleBecauseOfHeadsUp());
     }
 
     private void onSplitShadeEnabledChanged() {
