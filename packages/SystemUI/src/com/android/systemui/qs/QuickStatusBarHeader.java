@@ -740,6 +740,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 mBatteryIcon.setBatteryEstimate(
                         TunerService.parseInteger(newValue, 0));
                 setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
+                break;
             case SHOW_QS_CLOCK:
                 mShowClock =
                         TunerService.parseIntegerSwitch(newValue, true);
