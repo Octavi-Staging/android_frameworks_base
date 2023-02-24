@@ -18,6 +18,7 @@ import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_ICON
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_IMS;
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_MOBILE;
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_MOBILE_NEW;
+import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_NETWORK_TRAFFIC;
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_WIFI;
 import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_WIFI_NEW;
 
@@ -63,6 +64,7 @@ import com.android.systemui.statusbar.pipeline.mobile.ui.viewmodel.MobileIconsVi
 import com.android.systemui.statusbar.pipeline.wifi.ui.WifiUiAdapter;
 import com.android.systemui.statusbar.pipeline.wifi.ui.view.ModernStatusBarWifiView;
 import com.android.systemui.statusbar.pipeline.wifi.ui.viewmodel.LocationBasedWifiViewModel;
+import com.android.systemui.statusbar.policy.NetworkTrafficSB;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Assert;
 
@@ -496,6 +498,9 @@ public interface StatusBarIconController {
 
                 case TYPE_IMS:
                     return addImsIcon(index, slot, holder.getImsState());
+
+                case TYPE_NETWORK_TRAFFIC:
+                    return addNetworkTraffic(index, slot);
             }
 
             return null;
@@ -541,6 +546,12 @@ public interface StatusBarIconController {
                 mDemoStatusIcons.addModernWifiView(mWifiViewModel);
             }
 
+            return view;
+        }
+
+        protected NetworkTrafficSB addNetworkTraffic(int index, String slot) {
+            NetworkTrafficSB view = onCreateNetworkTraffic(slot);
+            mGroup.addView(view, index, onCreateLayoutParams());
             return view;
         }
 
@@ -633,6 +644,12 @@ public interface StatusBarIconController {
 
         private StatusBarImsView onCreateStatusBarImsView(String slot) {
             StatusBarImsView view = StatusBarImsView.fromContext(mContext, slot);
+            return view;
+        }
+
+        private NetworkTrafficSB onCreateNetworkTraffic(String slot) {
+            NetworkTrafficSB view = new NetworkTrafficSB(mContext);
+            view.setPadding(4, 0, 4, 0);
             return view;
         }
 
