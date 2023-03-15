@@ -221,7 +221,6 @@ public abstract class StatusBarViewModule {
     @Named(LARGE_SCREEN_BATTERY_CONTROLLER)
     static BatteryMeterViewController getBatteryMeterViewController(
             @Named(SPLIT_SHADE_BATTERY_VIEW) BatteryMeterView batteryMeterView,
-            UserTracker userTracker,
             ConfigurationController configurationController,
             TunerService tunerService,
             @Main Handler mainHandler,
@@ -231,7 +230,6 @@ public abstract class StatusBarViewModule {
     ) {
         return new BatteryMeterViewController(
                 batteryMeterView,
-                userTracker,
                 configurationController,
                 tunerService,
                 mainHandler,
