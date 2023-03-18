@@ -385,13 +385,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 mTintedIconManager.setTint(textColor);
             }
             if (mBatteryRemainingIcon.getBatteryStyle() == BATTERY_STYLE_CIRCLE) {
-                final float factor = 0.3f;
-                textColorSecondary = Color.argb(
-                    Color.alpha(textColor),
-                    Math.round(Color.red(textColor) * factor),
-                    Math.round(Color.green(textColor) * factor),
-                    Math.round(Color.blue(textColor) * factor)
-                );
+                textColorSecondary = reduceColorAlpha(textColor, 0.3f);
             }
             mBatteryRemainingIcon.updateColors(mTextColorPrimary, textColorSecondary,
                     mTextColorPrimary);
@@ -415,6 +409,14 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         updateAnimators();
 
         updateClockDatePadding();
+    }
+
+    private static int reduceColorAlpha(int color, float factor) {
+        final int a = Math.round(Color.alpha(color) * factor);
+        final int r = Color.red(color);
+        final int g = Color.green(color);
+        final int b = Color.blue(color);
+        return Color.argb(a, r, g, b);
     }
 
     private void updateClockDatePadding() {
