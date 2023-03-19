@@ -58,6 +58,7 @@ import com.android.systemui.statusbar.phone.dagger.CentralSurfacesComponent.Cent
 import com.android.systemui.statusbar.phone.dagger.StatusBarViewModule.SHADE_HEADER
 import com.android.systemui.statusbar.policy.Clock
 import com.android.systemui.statusbar.policy.ConfigurationController
+import com.android.systemui.statusbar.policy.NetworkTraffic
 import com.android.systemui.statusbar.policy.VariableDateView
 import com.android.systemui.statusbar.policy.VariableDateViewController
 import com.android.systemui.util.ViewController
@@ -121,6 +122,7 @@ constructor(
     private val date: TextView = header.findViewById(R.id.date)
     private val iconContainer: StatusIconContainer = header.findViewById(R.id.statusIcons)
     private val qsCarrierGroup: QSCarrierGroup = header.findViewById(R.id.carrier_group)
+    private val networkTraffic: NetworkTraffic = header.findViewById(R.id.networkTraffic)
 
     private var roundedCorners = 0
     private var cutout: DisplayCutout? = null
@@ -222,6 +224,7 @@ constructor(
                 val update =
                     combinedShadeHeadersConstraintManager.privacyChipVisibilityConstraints(visible)
                 header.updateAllConstraints(update)
+                setNetworkTrafficVisible(qsExpandedFraction == 1f)
             }
         }
 
@@ -270,6 +273,7 @@ constructor(
             qsCarrierGroupControllerBuilder.setQSCarrierGroup(qsCarrierGroup).build()
 
         privacyIconsController.onParentVisible()
+        setNetworkTrafficVisible(false)
     }
 
     override fun onViewAttached() {
@@ -432,6 +436,7 @@ constructor(
             header.progress = qsExpandedFraction
             updateBatteryMode()
         }
+        setNetworkTrafficVisible(qsExpandedFraction == 1f)
     }
 
     private fun logInstantEvent(message: String) {
@@ -475,6 +480,10 @@ constructor(
             clockPaddingEnd,
             clock.paddingBottom
         )
+    }
+
+    private fun setNetworkTrafficVisible(visible: Boolean) {
+        networkTraffic.setAlpha(if (visible) 1f else 0f)
     }
 
     override fun dump(pw: PrintWriter, args: Array<out String>) {
