@@ -40,6 +40,7 @@ public class PixelPropsUtils {
 
     public static final String PACKAGE_NETFLIX = "com.netflix.mediaclient";
 
+    private static final Map<String, Object> propsToChangeGeneric;
     private static final Map<String, Object> propsToChange;
     private static final Map<String, Object> propsToChangePixel5;
     private static final Map<String, Object> propsToChangePixel2;
@@ -167,6 +168,9 @@ public class PixelPropsUtils {
         propsToKeep = new HashMap<>();
         propsToChange = new HashMap<>();
         propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
+        propsToChangeGeneric = new HashMap<>();
+        propsToChangeGeneric.put("TYPE", "user");
+        propsToChangeGeneric.put("TAGS", "release-keys");
         propsToChangePixel7Pro = new HashMap<>();
         propsToChangePixel7Pro.put("BRAND", "google");
         propsToChangePixel7Pro.put("MANUFACTURER", "Google");
@@ -214,7 +218,7 @@ public class PixelPropsUtils {
     public static void setProps(Context context) {
         final String packageName = context.getPackageName();
         final String processName = Application.getProcessName();
-
+        propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
         if (TextUtils.isEmpty(packageName) || processName == null) {
             return;
         }
