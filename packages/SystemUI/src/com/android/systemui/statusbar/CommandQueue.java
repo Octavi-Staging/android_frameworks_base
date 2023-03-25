@@ -1836,6 +1836,7 @@ public class CommandQueue extends IStatusBar.Stub implements
                     for (int i = 0; i < mCallbacks.size(); i++) {
                         mCallbacks.get(i).leftInLandscapeChanged(msg.arg1 != 0);
                     }
+                    break;
                 case MSG_SET_BLOCKED_GESTURAL_NAVIGATION:
                     mCallbacks.forEach(cb -> cb.setBlockedGesturalNavigation((Boolean) msg.obj));
                     break;
