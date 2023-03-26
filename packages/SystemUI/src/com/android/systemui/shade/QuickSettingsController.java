@@ -406,7 +406,8 @@ public class QuickSettingsController {
                 LargeScreenUtils.shouldUseLargeScreenShadeHeader(mPanelView.getResources());
         mLargeScreenShadeHeaderHeight =
                 mResources.getDimensionPixelSize(R.dimen.large_screen_shade_header_height);
-        int topMargin = mUseLargeScreenShadeHeader ? mLargeScreenShadeHeaderHeight :
+        int topMargin = mUseLargeScreenShadeHeader ? mStatusBarMinHeight +
+                mResources.getDimensionPixelSize(R.dimen.qqs_margin_top) :
                 mResources.getDimensionPixelSize(R.dimen.notification_panel_margin_top);
         mShadeHeaderController.setLargeScreenActive(mUseLargeScreenShadeHeader);
         mAmbientState.setStackTopMargin(topMargin);
