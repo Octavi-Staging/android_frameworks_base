@@ -19,6 +19,7 @@ import static android.provider.Settings.Global.BATTERY_ESTIMATES_LAST_UPDATE_TIM
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.flags.FeatureFlags;
 import com.android.systemui.flags.Flags;
