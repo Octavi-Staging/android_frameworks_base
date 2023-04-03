@@ -283,6 +283,7 @@ constructor(
 
         privacyIconsController.onParentVisible()
         setNetworkTrafficVisible(false)
+        clock.setQsHeader()
     }
 
     override fun onViewAttached() {
