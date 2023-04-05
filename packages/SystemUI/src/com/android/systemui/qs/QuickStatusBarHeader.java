@@ -80,10 +80,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             "system:" + Settings.System.QS_SHOW_BATTERY_PERCENT;
     private static final String QS_SHOW_BATTERY_ESTIMATE =
             "system:" + Settings.System.QS_SHOW_BATTERY_ESTIMATE;
-    private static final String SHOW_QS_CLOCK =
-            "system:" + Settings.System.SHOW_QS_CLOCK;
-    private static final String SHOW_QS_DATE =
-            "system:" + Settings.System.SHOW_QS_DATE;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -143,8 +139,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private boolean mIsSingleCarrier;
 
     private boolean mUseCombinedQSHeader;
-    private boolean mShowClock;
-    private boolean mShowDate;
 
     private final ActivityStarter mActivityStarter;
     private final Vibrator mVibrator;
@@ -191,9 +185,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
-        mClockView.setQsHeader();
         mClockView.setOnClickListener(this);
-        mClockView.setOnLongClickListener(this);
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
@@ -216,8 +208,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         updateResources();
 
         Dependency.get(TunerService.class).addTunable(this,
-                SHOW_QS_CLOCK,
-                SHOW_QS_DATE,
+                StatusBarIconController.ICON_HIDE_LIST,
                 STATUS_BAR_BATTERY_STYLE,
                 QS_BATTERY_STYLE,
                 QS_BATTERY_LOCATION,
@@ -261,7 +252,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (mDatePrivacyView.getMeasuredHeight() != mTopViewMeasureHeight) {
             mTopViewMeasureHeight = mDatePrivacyView.getMeasuredHeight();
-            updateAnimators();
+            post(this::updateAnimators);
         }
     }
 
@@ -482,10 +473,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
                     @Override
                     public void onAnimationStarted() {
-                        if (mShowClock && mShowDate) {
-                            mClockDateView.setVisibility(View.VISIBLE);
-                            mClockDateView.setFreezeSwitching(true);
-                        }
+                        mClockDateView.setVisibility(View.VISIBLE);
+                        mClockDateView.setFreezeSwitching(true);
                         setSeparatorVisibility(false);
                         if (!mIsSingleCarrier) {
                             mIconContainer.addIgnoredSlots(mRssiIgnoredSlots);
@@ -495,10 +484,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                     @Override
                     public void onAnimationAtStart() {
                         super.onAnimationAtStart();
-                        if (mShowClock && mShowDate) {
-                            mClockDateView.setFreezeSwitching(false);
-                            mClockDateView.setVisibility(View.VISIBLE);
-                        }
+                        mClockDateView.setFreezeSwitching(false);
+                        mClockDateView.setVisibility(View.VISIBLE);
                         setSeparatorVisibility(mShowClockIconsSeparator);
                         // In QQS we never ignore RSSI.
                         mIconContainer.removeIgnoredSlots(mRssiIgnoredSlots);
@@ -755,18 +742,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 mBatteryIcon.setBatteryEstimate(
                         TunerService.parseInteger(newValue, 0));
                 setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
-                break;
-            case SHOW_QS_CLOCK:
-                mShowClock =
-                        TunerService.parseIntegerSwitch(newValue, true);
-                mClockView.setClockVisibleByUser(mShowClock);
-                mClockDateView.setVisibility(mShowClock && mShowDate ? View.VISIBLE : View.GONE);
-                break;
-            case SHOW_QS_DATE:
-                mShowDate =
-                        TunerService.parseIntegerSwitch(newValue, true);
-                mDateContainer.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
-                mClockDateView.setVisibility(mShowClock && mShowDate ? View.VISIBLE : View.GONE);
                 break;
             default:
                 break;
