@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +40,6 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     private static final String CURRENT_PAGE = "current_page";
     private static final int NO_PAGE = -1;
-
-    private static final boolean DEBUG = false;
-    private static final String TAG = "PagedTileLayout";
 
     private static final int REVEAL_SCROLL_DURATION_MILLIS = 750;
     private static final float BOUNCE_ANIMATION_TENSION = 1.3f;
@@ -126,13 +122,12 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public int getTilesHeight() {
-        // Find the maximum height among all pages.
-        int height = mPages.stream()
-                           .filter(p -> p != null)
-                           .mapToInt(p -> p.getTilesHeight())
-                           .max().orElse(0);
-        if (DEBUG) Log.d(TAG, "getTilesHeight ret=" + height);
-        return height;
+        // Use the first page as that is the maximum height we need to show.
+        TileLayout tileLayout = mPages.get(0);
+        if (tileLayout == null) {
+            return 0;
+        }
+        return tileLayout.getTilesHeight();
     }
 
     @Override
