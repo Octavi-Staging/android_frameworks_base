@@ -5888,12 +5888,6 @@ public final class Settings {
         public static final String DATA_DISABLED_ICON = "data_disabled_icon";
 
         /**
-         * Whether to show material Dismiss All Button for notifications
-         * @hide
-         */
-        public static final String NOTIFICATION_MATERIAL_DISMISS = "notification_material_dismiss";
-
-        /**
          * Volume dialog timeout. Value in seconds
          * @hide
          */
