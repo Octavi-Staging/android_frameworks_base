@@ -5900,11 +5900,6 @@ public final class Settings {
         public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
 
         /**
-         * @hide
-         */
-        public static final String ENABLE_TASKBAR = "enable_taskbar";
-
-        /**
          * reTicker Status
          * @hide
          */
