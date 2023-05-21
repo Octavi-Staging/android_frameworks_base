@@ -3168,16 +3168,18 @@ class WindowContainer<E extends WindowContainer> extends ConfigurationContainer<
                                     || (transit == TRANSIT_OLD_TASK_OPEN)
                                     || (transit == TRANSIT_OLD_TASK_TO_BACK)
                                     || (transit == TRANSIT_OLD_TASK_TO_FRONT);
+        // always play TRANSIT_OLD_TASK_CHANGE_WINDOWING_MODE no matter what, because
+        // freeform maximize collapses if this animation is skipped. it also was
+        // fixed in an earlier commit, so it can be enabled without harm.
+        if (!(!inFreeform || !unsupportedInFreeform || WHITELIST_ALL_IN_FREEFORM
+                || transit == TRANSIT_OLD_TASK_CHANGE_WINDOWING_MODE))
+        return;
 
         final Pair<AnimationAdapter, AnimationAdapter> adapters = getAnimationAdapter(lp,
                 transit, enter, isVoiceInteraction);
         AnimationAdapter adapter = adapters.first;
         AnimationAdapter thumbnailAdapter = adapters.second;
-        // always play TRANSIT_OLD_TASK_CHANGE_WINDOWING_MODE no matter what, because
-        // freeform maximize collapses if this animation is skipped. it also was
-        // fixed in an earlier commit, so it can be enabled without harm.
-        if ((!inFreeform || !unsupportedInFreeform || WHITELIST_ALL_IN_FREEFORM
-                || transit == TRANSIT_OLD_TASK_CHANGE_WINDOWING_MODE) || adapter != null) {
+        if (adapter != null) {
             if (sources != null) {
                 mSurfaceAnimationSources.addAll(sources);
             }

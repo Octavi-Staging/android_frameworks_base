@@ -833,7 +833,7 @@ public class AppTransition implements Dump {
                     "applyAnimation: anim=%s nextAppTransition=ANIM_CUSTOM_IN_PLACE "
                             + "transit=%s Callers=%s",
                     a, appTransitionOldToString(transit), Debug.getCallers(3));
-        } else if (!freeform && mNextAppTransitionType == NEXT_TRANSIT_TYPE_CLIP_REVEAL) {
+        } else if (mNextAppTransitionType == NEXT_TRANSIT_TYPE_CLIP_REVEAL) {
             a = mTransitionAnimation.createClipRevealAnimationLockedCompat(
                     transit, enter, frame, displayFrame,
                     mDefaultNextAppTransitionAnimationSpec != null
