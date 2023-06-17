@@ -2071,7 +2071,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 } catch (RemoteException ignored) {
                 }
                 interceptScreenshotChord(
-                        TAKE_SCREENSHOT_FULLSCREEN, SCREENSHOT_KEY_OTHER, 0 /*pressDelay*/);
+                        TAKE_SCREENSHOT_FULLSCREEN, 0 /*pressDelay*/);
             }
         });
 
