@@ -85,9 +85,7 @@ public class PixelPropsUtils {
             "com.android.vending",
             "com.breel.wallpapers20",
             "com.nhs.online.nhsonline",
-            PACKAGE_NETFLIX,
-            "com.google.android.gms.persistent",
-            "com.google.android.as"
+            PACKAGE_NETFLIX
     };
 
     private static final String[] packagesToKeep = {
