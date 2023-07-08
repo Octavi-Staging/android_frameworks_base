@@ -121,7 +121,7 @@
     <java-symbol type="string" name="config_regularFontFamily" />
 
     <!-- Whether device supports in-display fingerprint when screen is off -->
-    <java-symbol type="bool" name="config_supportsScreenOffUdfps" />
+    <java-symbol type="bool" name="config_supportScreenOffUdfps" />
 
     <!-- Location indicator -->
     <java-symbol type="drawable" name="stat_sys_location" />
