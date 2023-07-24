@@ -85,6 +85,8 @@ import java.io.PrintWriter;
 public final class Choreographer {
     private static final String TAG = "Choreographer";
 
+    private static final boolean DEBUG = false;
+
     // Prints debug messages about jank which was detected (low volume).
     private static final boolean DEBUG_JANK = false;
 
@@ -1184,9 +1186,11 @@ public final class Choreographer {
                 // Otherwise, messages that predate the vsync event will be handled first.
                 long now = System.nanoTime();
                 if (timestampNanos > now) {
-                    Log.w(TAG, "Frame time is " + ((timestampNanos - now) * 0.000001f)
-                            + " ms in the future!  Check that graphics HAL is generating vsync "
-                            + "timestamps using the correct timebase.");
+                    if (DEBUG) {
+                        Log.w(TAG, "Frame time is " + ((timestampNanos - now) * 0.000001f)
+                                + " ms in the future!  Check that graphics HAL is generating vsync "
+                                + "timestamps using the correct timebase.");
+                    }
                     timestampNanos = now;
                 }
 
