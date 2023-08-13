@@ -44,7 +44,6 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChange;
     private static final Map<String, Object> propsToChangePixel5;
     private static final Map<String, Object> propsToChangePixel2;
-    private static final Map<String, Object> propsToChangePixelTablet;
     private static final Map<String, Object> propsToChangePixel7Pro;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Object> propsToChangeROG1;
@@ -53,11 +52,6 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeMI11;
     private static final Map<String, Object> propsToChangeK30U;
     private static final Map<String, ArrayList<String>> propsToKeep;
-
-    private static final String[] packagesToChangePixelTablet = {
-            "com.google.android.googlequicksearchbox",
-            "com.google.android.apps.googleassistant",
-    };
 
     private static final String[] packagesToChangePixel7Pro = {
             "com.google.android.apps.wallpaper",
@@ -186,14 +180,14 @@ public class PixelPropsUtils {
         propsToChangePixel7Pro.put("DEVICE", "cheetah");
         propsToChangePixel7Pro.put("PRODUCT", "cheetah");
         propsToChangePixel7Pro.put("MODEL", "Pixel 7 Pro");
-        propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230705.001/10216780:user/release-keys");
+        propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230805.001/10316531:user/release-keys");
         propsToChangePixel5 = new HashMap<>();
         propsToChangePixel5.put("BRAND", "google");
         propsToChangePixel5.put("MANUFACTURER", "Google");
         propsToChangePixel5.put("DEVICE", "redfin");
         propsToChangePixel5.put("PRODUCT", "redfin");
         propsToChangePixel5.put("MODEL", "Pixel 5");
-        propsToChangePixel5.put("FINGERPRINT", "google/redfin/redfin:13/TQ3A.230705.001/10216780:user/release-keys");
+        propsToChangePixel5.put("FINGERPRINT", "google/redfin/redfin:13/TQ3A.230805.001/10316531:user/release-keys");
         propsToChangePixelXL = new HashMap<>();
         propsToChangePixelXL.put("BRAND", "google");
         propsToChangePixelXL.put("MANUFACTURER", "Google");
@@ -208,13 +202,6 @@ public class PixelPropsUtils {
         propsToChangePixel2.put("PRODUCT", "walleye");
         propsToChangePixel2.put("MODEL", "Pixel 2");
         propsToChangePixel2.put("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-        propsToChangePixelTablet = new HashMap<>();
-        propsToChangePixelTablet.put("BRAND", "google");
-        propsToChangePixelTablet.put("MANUFACTURER", "Google");
-        propsToChangePixelTablet.put("DEVICE", "tangorpro");
-        propsToChangePixelTablet.put("PRODUCT", "tangorpro");
-        propsToChangePixelTablet.put("MODEL", "Pixel Tablet");
-        propsToChangePixelTablet.put("FINGERPRINT", "google/tangorpro/tangorpro:13/TQ3A.230605.009.A1/10100517:user/release-keys");
         propsToChangeROG1 = new HashMap<>();
         propsToChangeROG1.put("MODEL", "ASUS_Z01QD");
         propsToChangeROG1.put("MANUFACTURER", "asus");
@@ -274,8 +261,6 @@ public class PixelPropsUtils {
                     propsToChange.putAll(propsToChangePixel2);
                 } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixelXL);
-                } else if (Arrays.asList(packagesToChangePixelTablet).contains(packageName)) {
-                    propsToChange.putAll(propsToChangePixelTablet);
                 } else {
                     propsToChange.putAll(propsToChangePixel5);
                 }

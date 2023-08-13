@@ -6793,7 +6793,7 @@ public class ActivityManagerService extends IActivityManager.Stub
         mActivityTaskManager.unhandledBack();
     }
 
-    // TODO: Move to ContentProviderHelper?
+    // TODO: Replace this method with one that returns a bound IContentProvider.
     public ParcelFileDescriptor openContentUri(String uriString) throws RemoteException {
         enforceNotIsolatedCaller("openContentUri");
         final int userId = UserHandle.getCallingUserId();
@@ -6822,6 +6822,16 @@ public class ActivityManagerService extends IActivityManager.Stub
                     Log.e(TAG, "Cannot find package for uid: " + uid);
                     return null;
                 }
+
+                final ApplicationInfo appInfo = mPackageManagerInt.getApplicationInfo(
+                        androidPackage.getPackageName(), /*flags*/0, Process.SYSTEM_UID,
+                        UserHandle.USER_SYSTEM);
+                if (!appInfo.isVendor() && !appInfo.isSystemApp() && !appInfo.isSystemExt()
+                        && !appInfo.isProduct()) {
+                    Log.e(TAG, "openContentUri may only be used by vendor/system/product.");
+                    return null;
+                }
+
                 final AttributionSource attributionSource = new AttributionSource(
                         Binder.getCallingUid(), androidPackage.getPackageName(), null);
                 pfd = cph.provider.openFile(attributionSource, uri, "r", null);
@@ -12425,8 +12435,10 @@ public class ActivityManagerService extends IActivityManager.Stub
         // (probably it's "killed" before starting for real), reset the bookkeeping.
         final ProcessRecord predecessor = app.mPredecessor;
         if (predecessor != null) {
-            predecessor.mSuccessor = null;
-            predecessor.mSuccessorStartRunnable = null;
+            if (predecessor.mSuccessor == app) {
+                predecessor.mSuccessor = null;
+                predecessor.mSuccessorStartRunnable = null;
+            }
             app.mPredecessor = null;
         }
 
