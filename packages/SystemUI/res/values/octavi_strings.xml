@@ -166,4 +166,26 @@
 
     <!-- Name of the clock in status bar [CHAR LIMIT=30] -->
     <string name="clock">Clock</string>
+
+    <!-- Preferred network tile -->
+    <string name="quick_settings_preferred_network_label">Preferred network</string>
+    <string name="quick_settings_preferred_network_lte">4g / LTE</string>
+    <string name="quick_settings_preferred_network_nr">5g / NR</string>
+    <string name="quick_settings_preferred_network_unsupported">Unsupported</string>
+
+    <!-- AOD QS tile -->
+    <string name="quick_settings_aod_label">AOD</string>
+    <string name="quick_settings_aod_off_powersave_label">AOD off\nBattery saver</string>
+
+    <!-- Ambient display QS tile --> <string 
+    name="quick_settings_ambient_display_label">Ambient display</string> 
+    <string 
+    name="accessibility_quick_settings_ambient_display_off">Ambient 
+    display off.</string> <string 
+    name="accessibility_quick_settings_ambient_display_on">Ambient 
+    display on.</string> <string 
+    name="accessibility_quick_settings_ambient_display_changed_off">Ambient 
+    display turned off.</string> <string 
+    name="accessibility_quick_settings_ambient_display_changed_on">Ambient 
+    display turned on.</string>
 </resources>
