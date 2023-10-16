@@ -2081,7 +2081,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mContext, minHorizontal, maxHorizontal, minVertical, maxVertical, maxRadius);
         }
 
-        mSwipeToScreenshot = new SwipeToScreenshotListener(context, new SwipeToScreenshotListener.Callbacks() {
+        mSwipeToScreenshot = new SwipeToScreenshotListener(mContext, new SwipeToScreenshotListener.Callbacks() {
             @Override
             public void onSwipeThreeFinger() {
                 IDreamManager dreamManager = getDreamManager();
@@ -2092,7 +2092,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 } catch (RemoteException ignored) {
                 }
                 interceptScreenshotChord(
-                        TAKE_SCREENSHOT_FULLSCREEN, SCREENSHOT_KEY_OTHER, 0 /*pressDelay*/);
+                        TAKE_SCREENSHOT_FULLSCREEN, 0 /*pressDelay*/);
             }
         });
 
