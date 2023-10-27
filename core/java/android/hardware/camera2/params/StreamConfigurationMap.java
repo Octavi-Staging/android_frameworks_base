@@ -139,6 +139,35 @@ public final class StreamConfigurationMap {
     }
 
     /**
+     * @hide
+     */
+    public StreamConfigurationMap(
+            StreamConfiguration[] configurations,
+            StreamConfigurationDuration[] minFrameDurations,
+            StreamConfigurationDuration[] stallDurations,
+            StreamConfiguration[] depthConfigurations,
+            StreamConfigurationDuration[] depthMinFrameDurations,
+            StreamConfigurationDuration[] depthStallDurations,
+            StreamConfiguration[] dynamicDepthConfigurations,
+            StreamConfigurationDuration[] dynamicDepthMinFrameDurations,
+            StreamConfigurationDuration[] dynamicDepthStallDurations,
+            StreamConfiguration[] heicConfigurations,
+            StreamConfigurationDuration[] heicMinFrameDurations,
+            StreamConfigurationDuration[] heicStallDurations,
+            HighSpeedVideoConfiguration[] highSpeedVideoConfigurations,
+            ReprocessFormatsMap inputOutputFormatsMap,
+            boolean listHighResolution) {
+        this(configurations, minFrameDurations, stallDurations,
+                    depthConfigurations, depthMinFrameDurations, depthStallDurations,
+                    dynamicDepthConfigurations, dynamicDepthMinFrameDurations,
+                    dynamicDepthStallDurations,
+                    heicConfigurations, heicMinFrameDurations, heicStallDurations,
+                    null /*jpegRConfigurations*/, null /*jpegRMinFrameDurations*/, null /*jpegRStallDurations*/,
+                    highSpeedVideoConfigurations, inputOutputFormatsMap, listHighResolution,
+                    /*enforceImplementationDefined*/ true);
+    }
+
+    /**
      * Create a new {@link StreamConfigurationMap}.
      *
      * <p>The array parameters ownership is passed to this object after creation; do not
