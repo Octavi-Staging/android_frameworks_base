@@ -329,6 +329,8 @@ public final class NotificationPanelViewController implements Dumpable {
             "system:" + Settings.System.RETICKER_STATUS;
     private static final String RETICKER_COLORED =
             "system:" + Settings.System.RETICKER_COLORED;
+    private static final String QS_UI_STYLE =
+            "system:" + Settings.System.QS_UI_STYLE;
     private static final String KEYGUARD_QUICK_TOGGLES_NEW =
             "system:" + Settings.System.KEYGUARD_QUICK_TOGGLES_NEW;
 
@@ -732,6 +734,9 @@ public final class NotificationPanelViewController implements Dumpable {
     private int mStatusBarHeaderHeight;
 
     private boolean mBlockedGesturalNavigation = false;
+
+    private boolean mIsA11Style;
+
 
     @Inject
     public NotificationPanelViewController(NotificationPanelView view,
@@ -4697,6 +4702,7 @@ public final class NotificationPanelViewController implements Dumpable {
             mConfigurationController.addCallback(mConfigurationListener);
             mTunerService.addTunable(this, RETICKER_STATUS);
             mTunerService.addTunable(this, RETICKER_COLORED);
+            mTunerService.addTunable(this, QS_UI_STYLE);
             mTunerService.addTunable(this, KEYGUARD_QUICK_TOGGLES_NEW);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
@@ -4728,6 +4734,9 @@ public final class NotificationPanelViewController implements Dumpable {
                 case RETICKER_COLORED:
                     mReTickerColored =
                             TunerService.parseIntegerSwitch(newValue, false);
+                    break;
+                case QS_UI_STYLE:
+                    mIsA11Style = TunerService.parseInteger(newValue, 0) == 1;
                     break;
                 case KEYGUARD_QUICK_TOGGLES_NEW:
                     mKeyguardBottomAreaViewModel.updateSettings();
